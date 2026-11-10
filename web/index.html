@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ootle Circle: rotating savings circles on Tari Ootle</title>
+<style>
+:root{--bg:#0f1115;--card:#181b22;--ink:#e8e8ea;--mute:#9aa0aa;--acc:#7b5cff;--ok:#2fbf71;--bad:#ff5c5c}
+*{box-sizing:border-box}body{margin:0;font:15px/1.45 system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+header{padding:28px 20px 8px;max-width:1100px;margin:auto}h1{margin:0 0 4px;font-size:26px}header p{color:var(--mute);margin:0 0 8px}
+main{max-width:1100px;margin:auto;padding:12px 20px 24px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:850px){main{grid-template-columns:1fr}}
+section{background:var(--card);border-radius:12px;padding:16px}h2{font-size:16px;margin:0 0 10px}
+label{display:block;color:var(--mute);font-size:13px;margin:6px 0 2px}input{width:100%;padding:7px;border-radius:7px;border:1px solid #333;background:#0f1115;color:var(--ink)}
+button{background:var(--acc);color:#fff;border:0;border-radius:7px;padding:7px 11px;margin:4px 4px 0 0;cursor:pointer}button.sec{background:#2a2f3a}
+button:disabled{opacity:.4;cursor:default}table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:6px 4px;border-bottom:1px solid #262a33;text-align:left}
+.pill{display:inline-block;padding:1px 8px;border-radius:99px;font-size:12px;background:#2a2f3a}.ok{color:var(--ok)}.bad{color:var(--bad)}.mute{color:var(--mute)}
+#log,#tx{font:12px/1.5 ui-monospace,monospace;white-space:pre-wrap;max-height:260px;overflow:auto;background:#0f1115;padding:8px;border-radius:7px}
+.full{grid-column:1/-1}.stats{display:flex;gap:18px;flex-wrap:wrap}.stats div{min-width:120px}.stats b{display:block;font-size:20px}
+footer{max-width:1100px;margin:0 auto 32px;padding:0 20px;color:var(--mute);font-size:13px}
+footer a{color:#b9a8ff}
+</style>
+</head>
+<body>
+<header>
+<h1>Ootle Circle</h1>
+<p>A rotating savings circle (jam'iya, tontine, susu, chama, tanda, committee) with no cash-holder. Everyone pays each round, one member takes the pot, collateral covers anyone who misses. This page is a walletless simulation of the on-chain template; every button shows the Ootle transaction it maps to.</p>
+</header>
+<main>
+<section id="setup">
+<h2>1. Create a circle</h2>
+<label>Name</label><input id="name" value="Souq al-Juma jam'iya">
+<label>Contribution per round (TARI)</label><input id="contribution" type="number" value="100" min="1">
+<label>Collateral per member (TARI). Full cover = contribution × (members − 1)</label><input id="collateral" type="number" value="300" min="1">
+<label>Members (comma separated)</label><input id="members" value="Amina, Omar, Salma, Yusuf">
+<label>Round length (epochs)</label><input id="epochs" type="number" value="10" min="1">
+<button id="create">Create, join everyone, start</button>
+</section>
+<section>
+<h2>2. The circle</h2>
+<div class="stats" id="stats"></div>
+<div style="margin-top:10px"><button id="settle">Settle round</button><button class="sec" id="tick">Advance 1 epoch</button><button class="sec" id="deadline">Jump to deadline</button><button class="sec" id="payall">Everyone pays</button></div>
+<p id="msg" class="mute"></p>
+</section>
+<section class="full">
+<h2>Members (payout order)</h2>
+<table><thead><tr><th>#</th><th>Member</th><th>Wallet</th><th>Paid this round</th><th>Missed</th><th>Collateral left</th><th>Pot</th><th></th></tr></thead><tbody id="rows"></tbody></table>
+</section>
+<section><h2>Events</h2><div id="log"></div></section>
+<section><h2>Integrate: the Ootle transaction for the last action</h2><div id="tx"></div></section>
+</main>
+<footer>
+<p>The pot never sits with a person: only <code>settle</code> can move it, and only to the member whose turn it is. The organizer cannot withdraw funds. This demo does not connect to a wallet or a network. The Rust template is MIT-licensed and is not yet published on Esmeralda or mainnet. Source is in this repository.</p>
+</footer>
+<script type="module" src="app.js"></script>
+</body>
+</html>

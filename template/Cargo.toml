@@ -1,0 +1,45 @@
+[workspace]
+[package]
+name = "ootle_circle"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+description = "Rotating savings circles (ROSCA, jam'iya, tontine, susu) on Tari Ootle"
+
+[package.metadata.tari-template]
+tags = ["savings", "rosca", "community", "payments"]
+category = "payments"
+
+[dependencies]
+tari_template_lib = { version = "0.38" }
+minicbor = { version = "2.2", default-features = false, features = ["alloc", "derive"] }
+
+[dev-dependencies]
+tari_template_test_tooling = "0.50.1"
+
+[lib]
+crate-type = ["cdylib"]
+
+[profile.release]
+opt-level = 's'
+lto = true
+codegen-units = 1
+panic = 'abort'
+strip = true
+
+# The WASM engine is ~10x slower in debug builds; optimise it even for tests.
+[profile.dev.package.wasmer]
+opt-level = 2
+[profile.dev.package.wasmer-compiler]
+opt-level = 2
+[profile.dev.package.wasmer-compiler-cranelift]
+opt-level = 2
+[profile.dev.package.cranelift-codegen]
+opt-level = 2
+[profile.dev.package.cranelift-frontend]
+opt-level = 2
+[profile.dev.package.cranelift-entity]
+opt-level = 2
+
+[build-dependencies]
+tari_ootle_template_build = "0.18"
