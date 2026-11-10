@@ -1,0 +1,14 @@
+# Build artifacts
+template/target/
+**/*.rs.bk
+
+# OS and editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
+
+# Node (the demo is static; no install is required)
+node_modules/
